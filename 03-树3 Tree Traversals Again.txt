@@ -1,0 +1,77 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stack>
+using namespace std;
+
+void getPostOrder(vector<int> preorder,int preL,vector<int> inorder,int inL,vector<int> &postorder,int postL,int n)
+{
+    if(n == 0) return;
+    else if(n == 1){
+        postorder[postL] = preorder[preL];
+        return;
+    }
+    else{
+        int i = 0;
+        while(inorder[inL + i] != preorder[preL]) i++;
+        int L = i;
+        int R = n - i - 1;
+        postorder[postL + n - 1] = preorder[preL];
+        getPostOrder(preorder,preL + 1,inorder,inL,postorder,postL,L);
+        getPostOrder(preorder,preL + L + 1,inorder,inL + L + 1,postorder,postL + L,R);
+    }
+}
+
+/*
+void getPostOrder(vector<int> preOrder, int preL, vector<int> inOrder, int inL,
+                  vector<int> &postOrder, int postL, int n)
+{
+    if (n == 0) return ;
+    if (n == 1) {
+        postOrder[postL] = preOrder[preL];
+        return ;
+    }
+    auto root = preOrder[preL];
+    postOrder[postL + n - 1] = root;
+    //在中序遍历数组上找出root的位置
+    int i = 0;
+    while (i < n) {
+        if (inOrder[inL + i] == root) break;
+        ++i;
+    }
+    // 计算出root节点左右子树节点的个数
+    int L = i, R = n - i - 1;
+    // 递归的进行求解
+    getPostOrder(preOrder, preL + 1, inOrder, inL, postOrder, postL, L);
+    getPostOrder(preOrder, preL + L + 1, inOrder, inL + L + 1, postOrder, postL + L, R);
+}
+*/
+int main()
+{
+    int n,key;
+    stack<int> s;
+    vector<int> preorder;
+    vector<int> inorder;
+    cin >> n;
+    vector<int> postorder(n);
+    n = 2 * n;
+    string str;
+    while(n--){
+        cin >> str;
+        if(str == "Push"){
+            cin >> key;
+            preorder.push_back(key);
+            s.push(key);
+        }else if(str == "Pop"){
+            key = s.top();
+            s.pop();
+            inorder.push_back(key);
+        }
+    }
+    getPostOrder(preorder,0,inorder,0,postorder,0,preorder.size());
+    for(int i = 0; i < postorder.size(); i++){
+        cout << postorder[i];
+        if(i != postorder.size() - 1) cout << " ";
+    }
+    return 0;
+}

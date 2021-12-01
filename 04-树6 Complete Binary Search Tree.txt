@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 1001;
+int CBT[maxn],nums[maxn];
+int index = 0;
+
+void inorder(int root,int n)
+{
+    if(root > n) return;
+    inorder(root * 2,n);
+    CBT[root] = nums[index];
+    index++;
+    inorder(root * 2 + 1,n);
+}
+
+int main()
+{
+    int n,i;
+    scanf("%d\n",&n);
+    for(i = 0; i < n; i++){
+        scanf("%d",&nums[i]);
+    }
+    sort(nums,nums + n);
+    inorder(1,n);
+    for(i = 1; i <= n; i++){
+        printf("%d",CBT[i]);
+        if(i != n) printf(" ");
+    }
+    return 0;
+}

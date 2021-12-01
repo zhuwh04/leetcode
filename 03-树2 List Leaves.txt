@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include<queue>
+using namespace std;
+
+struct Node{
+    int left;
+    int right;
+}T[10];
+
+void LevelorderTraversal(int Root,int n)
+{
+    queue<int> q;
+    int cn = 0;
+    if(Root == -1) return;
+    q.push(Root);
+    while(!q.empty()){
+        int k = q.front();
+        q.pop();
+        cn = cn + 1;
+        if(T[k].left == -1 && T[k].right == -1){
+            printf("%d",k);
+            if(cn != n) printf(" ");
+        }
+        if(T[k].left != -1){
+            q.push(T[k].left);
+        }
+        if(T[k].right != -1){
+            q.push(T[k].right);
+        }
+    }
+}
+
+int main()
+{
+    int n,i,Root;
+    char cl,cr;
+    int check[10];
+    scanf("%d\n",&n);
+    for(i = 0; i < n; i++) check[i] = 0;
+    for(i = 0; i < n; i++){
+        scanf("%c %c",&cl,&cr);
+        getchar();
+        if(cl != '-'){
+            T[i].left = cl - '0';
+            check[T[i].left] = 1;
+        }else T[i].left = -1;
+
+        if(cr != '-'){
+            T[i].right = cr - '0';
+            check[T[i].right] = 1;
+        }else T[i].right = -1;
+    }
+    for(i = 0; i < n; i++){
+        if(!check[i]) Root = i;
+    }
+    LevelorderTraversal(Root,n);
+    return 0;
+}
